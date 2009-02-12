@@ -47,14 +47,17 @@ module RankFu
     def has_role(role)
       role = ensure_role(role)       
       role.set_mates.each{|set_mate| self.does_not_have_role set_mate} if role.set?  
-      self.update_attribute(:role, (self.role || 0 ) | role.value);self
+      self.role = (self.role || 0 ) | role.value)
+      self
     end    
 
     def ensure_role(role_key_or_name)
      role_key_or_name.class == Role ? role_key_or_name : Role.find_by_key_or_name(role_key_or_name) end
 
     def does_not_have_role(role) 
-      self.update_attribute(:role, self.role ^ (self.role & ensure_role(role).value)); self end 
+      self.role = self.role ^ (self.role & ensure_role(role).value)
+      self
+    end 
 
     def roles
       Role.find(:all).select{|role| (self.role & role.value) > 0}.map(&:key) rescue [] end 
