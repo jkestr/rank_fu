@@ -47,7 +47,7 @@ module RankFu
     def has_role(role)
       role = ensure_role(role)       
       role.set_mates.each{|set_mate| self.does_not_have_role set_mate} if role.set?  
-      self.role = (self.role || 0 ) | role.value)
+      self.role = (self.role || 0 ) || role.value
       self
     end    
 
